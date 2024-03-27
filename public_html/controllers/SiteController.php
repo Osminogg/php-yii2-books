@@ -4,7 +4,6 @@ namespace app\controllers;
 
 use app\models\Author;
 use app\models\Book;
-use app\models\PopularSearch;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;

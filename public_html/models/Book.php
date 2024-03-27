@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\jobs\SubscriptionJob;
 use Yii;
 
 /**
@@ -34,11 +35,11 @@ class Book extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title'], 'required'],
+            [['title', 'year'], 'required'],
             [['year'], 'integer'],
             [['description'], 'string'],
             [['title', 'isbn', 'photo'], 'string', 'max' => 255],
-            [['isbn'], 'unique'],
+            [['isbn'], 'unique', 'targetClass' => 'app\models\Book', 'filter' => $this->id !== null ? ['<>', 'id', $this->id] : [], 'message' => 'Такой isbn уже существует.'],
             [['author_ids'], 'safe']
         ];
     }
@@ -50,11 +51,11 @@ class Book extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'title' => 'Title',
-            'year' => 'Year',
-            'description' => 'Description',
-            'isbn' => 'Isbn',
-            'photo' => 'Photo',
+            'title' => 'Название',
+            'year' => 'Год',
+            'description' => 'Описание',
+            'isbn' => 'isbn',
+            'photo' => 'Фото',
         ];
     }
 
@@ -85,22 +86,5 @@ class Book extends \yii\db\ActiveRecord
             ->distinct()
             ->where(['IS NOT', 'year', null])
             ->column();
-    }
-
-    public function saveModel($author_ids)
-    {
-        $this->unlinkAll('authors', true);
-        if (!empty($author_ids)) {
-            if ($this->isNewRecord) {
-                $this->save();
-            }
-            foreach ($author_ids as $authorId) {
-                $author = Author::findOne($authorId);
-                if ($author) {
-                    $this->link('authors', $author);
-                }
-            }
-        }
-        return $this->save();
     }
 }

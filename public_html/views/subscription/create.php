@@ -3,13 +3,12 @@
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
-/** @var app\models\Author $model */
+/** @var app\models\Subscription $model */
 
-$this->title = 'Создание автора';
-$this->params['breadcrumbs'][] = ['label' => 'Авторы', 'url' => ['index']];
+$this->title = 'Подписаться';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="author-create">
+<div class="subscription-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

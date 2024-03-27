@@ -1,49 +1,40 @@
 <?php
 
-use app\models\Author;
+use app\models\Subscription;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
 /** @var yii\web\View $this */
-/** @var app\models\AuthorSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Авторы';
+$this->title = 'Подписки';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="author-index">
+<div class="subscription-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <? if(!Yii::$app->user->isGuest): ?>
-    <p>
-        <?= Html::a('Создать', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-    <? endif ?>
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
         'columns' => [
 //            ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'fio',
+            'author.fio',
+            'phone',
             [
                 'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Author $model, $key, $index, $column) {
+                'urlCreator' => function ($action, Subscription $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  },
                 'visibleButtons' => [
                     'update' => function ($model) {
-                        return !\Yii::$app->user->isGuest;
+                        return false;
                     },
-                    'delete' => function ($model) {
-                        return !\Yii::$app->user->isGuest;
+                    'view' => function ($model) {
+                        return false;
                     },
                 ]
             ],

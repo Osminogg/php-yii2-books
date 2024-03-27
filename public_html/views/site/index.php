@@ -8,10 +8,11 @@ use yii\helpers\Html;
 /** @var array $popularAuthors */
 /** @var array $availableYears */
 
-$this->title = 'My Yii Application';
+$this->title = 'Популярные книги';
 ?>
 <div class="site-index">
 
+    <h1><?= Html::encode($this->title) ?></h1>
     <table class="table">
         <thead>
         <tr>

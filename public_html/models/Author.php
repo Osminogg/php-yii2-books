@@ -42,7 +42,7 @@ class Author extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'fio' => 'Fio',
+            'fio' => 'ФИО',
         ];
     }
 
@@ -76,6 +76,9 @@ class Author extends \yii\db\ActiveRecord
 
     public static function getPopular($year)
     {
+        if (is_null($year)) {
+            return [];
+        }
         return Author::find()
             ->select(['authors.id', 'authors.fio', 'COUNT(books.id) as book_count'])
             ->joinWith(['books' => function ($query) use ($year) {

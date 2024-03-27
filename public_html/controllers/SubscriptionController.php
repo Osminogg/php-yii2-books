@@ -2,18 +2,16 @@
 
 namespace app\controllers;
 
-use app\models\Author;
-use app\models\Book;
-use app\models\BookForm;
-use app\models\BookSearch;
+use app\models\Subscription;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * BookController implements the CRUD actions for Book model.
+ * SubscriptionController implements the CRUD actions for Subscription model.
  */
-class BookController extends Controller
+class SubscriptionController extends Controller
 {
     /**
      * @inheritDoc
@@ -35,7 +33,7 @@ class BookController extends Controller
                         [
                             'allow' => true,
                             'roles' => ['?'],
-                            'actions'=> ['index','view']
+                            'actions'=> ['create']
                         ],
                         [
                             'allow' => true,
@@ -48,82 +46,57 @@ class BookController extends Controller
     }
 
     /**
-     * Lists all Book models.
+     * Lists all Subscription models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new BookSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => Subscription::find(),
+            /*
+            'pagination' => [
+                'pageSize' => 50
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC,
+                ]
+            ],
+            */
+        ]);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
 
     /**
-     * Displays a single Book model.
-     * @param int $id ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
-     * Creates a new Book model.
+     * Creates a new Subscription model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * @param $author_id
      * @return string|\yii\web\Response
      */
-    public function actionCreate()
+    public function actionCreate($author_id)
     {
-        $model = new BookForm();
-        $authors = Author::find()->all();
+        $model = new Subscription();
+        $model->author_id = $author_id;
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->validate() && $model->save()) {
-                return $this->redirect(['index']);
+            if ($model->load($this->request->post()) && $model->save()) {
+                return $this->redirect(['/author/view', 'id' => $model->id]);
             }
+        } else {
+            $model->loadDefaultValues();
         }
 
         return $this->render('create', [
             'model' => $model,
-            'authors' => $authors,
         ]);
     }
 
     /**
-     * Updates an existing Book model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $model = new BookForm(['book_id' => $id]);
-        $authors = Author::find()->all();
-
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->validate() && $model->save()) {
-                return $this->redirect(['index']);
-            }
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-            'authors' => $authors,
-        ]);
-    }
-
-    /**
-     * Deletes an existing Book model.
+     * Deletes an existing Subscription model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -137,15 +110,15 @@ class BookController extends Controller
     }
 
     /**
-     * Finds the Book model based on its primary key value.
+     * Finds the Subscription model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Book the loaded model
+     * @return Subscription the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Book::findOne(['id' => $id])) !== null) {
+        if (($model = Subscription::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

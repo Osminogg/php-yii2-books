@@ -3,13 +3,13 @@
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
-/** @var app\models\Book $model */
+/** @var app\models\BookForm $model */
 /** @var app\models\Author[] $authors */
 
-$this->title = 'Update Book: ' . $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Books', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->title = 'Обновить книгу: ' . $model->title;
+$this->params['breadcrumbs'][] = ['label' => 'Книги', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->book_id]];
+$this->params['breadcrumbs'][] = 'Обновить';
 ?>
 <div class="book-update">
 
